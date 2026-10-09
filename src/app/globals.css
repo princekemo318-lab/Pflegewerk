@@ -1,0 +1,210 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Design-Tokens
+   Navy als vertrauensbildende Basis, Türkis für positive Zustände, kühle Grautöne.
+   Alle Komponenten nutzen ausschließlich diese semantischen Variablen, damit Light-
+   und Dark-Mode automatisch konsistent sind.
+   --------------------------------------------------------------------------- */
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  color-scheme: light;
+  --bg: #f4f6fa;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --sunken: #eef2f7;
+  --fg: #0f1f38;
+  --fg-muted: #55657d;
+  --fg-subtle: #7b8aa0;
+  --line: #e1e6ee;
+  --line-strong: #cdd5e1;
+
+  --primary: #13294b;
+  --primary-hover: #0c1d38;
+  --primary-fg: #ffffff;
+  --primary-soft: #e7ecf5;
+
+  --accent: #0b8f80;
+  --accent-fg: #ffffff;
+  --accent-soft: #dcf3ee;
+  --accent-text: #06695e;
+
+  --warn: #a8640c;
+  --warn-soft: #fbf0db;
+  --danger: #b4323f;
+  --danger-soft: #fbe7e8;
+  --info: #2f5fb3;
+  --info-soft: #e6eefb;
+
+  --focus: #2f7de1;
+  --shadow-sm: 0 1px 2px rgb(15 31 56 / 0.06);
+  --shadow-md: 0 1px 2px rgb(15 31 56 / 0.04), 0 8px 24px -12px rgb(15 31 56 / 0.18);
+
+  /* Abwesenheitsfarben: Fläche / Text */
+  --abs-teal-bg: #cdeee7;
+  --abs-teal-fg: #075e54;
+  --abs-blue-bg: #d9e6fb;
+  --abs-blue-fg: #1f4a91;
+  --abs-violet-bg: #e7defa;
+  --abs-violet-fg: #563596;
+  --abs-amber-bg: #f8e6c3;
+  --abs-amber-fg: #7a4a06;
+  --abs-rose-bg: #f7d9dd;
+  --abs-rose-fg: #8e2532;
+  --abs-slate-bg: #e2e7ef;
+  --abs-slate-fg: #3e4d63;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0a1322;
+  --surface: #111d31;
+  --surface-2: #14223a;
+  --sunken: #0d1828;
+  --fg: #e7edf6;
+  --fg-muted: #a3b1c5;
+  --fg-subtle: #7c8ba1;
+  --line: #22324c;
+  --line-strong: #2f4262;
+
+  --primary: #dbe6f7;
+  --primary-hover: #ffffff;
+  --primary-fg: #0d1a2e;
+  --primary-soft: #1b2b46;
+
+  --accent: #34c3b1;
+  --accent-fg: #04201c;
+  --accent-soft: #10332f;
+  --accent-text: #6fdccd;
+
+  --warn: #e7b259;
+  --warn-soft: #3a2a10;
+  --danger: #f08592;
+  --danger-soft: #3d1a20;
+  --info: #8fb4f2;
+  --info-soft: #172a4a;
+
+  --focus: #6aa6f5;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 28px -14px rgb(0 0 0 / 0.7);
+
+  --abs-teal-bg: #0f3d37;
+  --abs-teal-fg: #8ae3d6;
+  --abs-blue-bg: #18305a;
+  --abs-blue-fg: #a9c6f6;
+  --abs-violet-bg: #2c2052;
+  --abs-violet-fg: #c9b6f5;
+  --abs-amber-bg: #3d2c0d;
+  --abs-amber-fg: #f0c97d;
+  --abs-rose-bg: #44202a;
+  --abs-rose-fg: #f3aab4;
+  --abs-slate-bg: #243248;
+  --abs-slate-fg: #b9c5d6;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-sunken: var(--sunken);
+  --color-fg: var(--fg);
+  --color-muted: var(--fg-muted);
+  --color-subtle: var(--fg-subtle);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-text: var(--accent-text);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-focus: var(--focus);
+
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), var(--font-body), ui-sans-serif, sans-serif;
+
+  --shadow-card: var(--shadow-md);
+  --shadow-soft: var(--shadow-sm);
+
+  /* Typografieskala */
+  --text-display: 3.5rem;
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.035em;
+  --text-title: 1.625rem;
+  --text-title--line-height: 1.2;
+  --text-title--letter-spacing: -0.02em;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--fg);
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.7;
+  }
+  [data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .abs-teal { background: var(--abs-teal-bg); color: var(--abs-teal-fg); }
+  .abs-blue { background: var(--abs-blue-bg); color: var(--abs-blue-fg); }
+  .abs-violet { background: var(--abs-violet-bg); color: var(--abs-violet-fg); }
+  .abs-amber { background: var(--abs-amber-bg); color: var(--abs-amber-fg); }
+  .abs-rose { background: var(--abs-rose-bg); color: var(--abs-rose-fg); }
+  .abs-slate { background: var(--abs-slate-bg); color: var(--abs-slate-fg); }
+  /* Offene Anträge: schraffiert, damit der Status auch ohne Farbe erkennbar ist */
+  .abs-pending {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      transparent 0 5px,
+      color-mix(in srgb, currentColor 16%, transparent) 5px 7px
+    );
+    outline: 1.5px dashed color-mix(in srgb, currentColor 55%, transparent);
+    outline-offset: -1.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
