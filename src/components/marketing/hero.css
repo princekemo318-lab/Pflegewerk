@@ -464,3 +464,38 @@
 @media (prefers-reduced-motion: reduce) {
   .calc-pop { animation: none; }
 }
+
+/* ---------------------------------------------------------------------------
+   Stufe 4: WebGL-Licht im Hero, Statement mit Scroll-Licht
+   --------------------------------------------------------------------------- */
+.aurora-canvas {
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+.aurora-canvas[data-ready="true"] { opacity: 1; }
+.hero-grid {
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 64px 64px,
+    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 64px 64px;
+  mask-image: radial-gradient(ellipse 70% 55% at 50% 0%, black 10%, transparent 70%);
+  opacity: 0.35;
+}
+.hero-fade {
+  background: linear-gradient(to bottom, transparent 55%, var(--bg));
+}
+
+.lit-statement { view-timeline-name: --lit; }
+.lit-accent { color: var(--accent-text); }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .lit-word {
+      color: color-mix(in srgb, var(--fg) 16%, transparent);
+      animation: lit-on linear both;
+      animation-timeline: --lit;
+      animation-range: cover var(--s) cover var(--e);
+    }
+    .lit-word.lit-accent { animation-name: lit-on-accent; }
+    @keyframes lit-on { to { color: var(--fg); } }
+    @keyframes lit-on-accent { to { color: var(--accent-text); } }
+  }
+}

@@ -19,6 +19,8 @@ import { HeroScene, RevealHeading } from "@/components/marketing/hero-scene";
 import { PointerSpotlight, TiltStage } from "@/components/marketing/pointer-effects";
 import { LeaveCalculatorDemo } from "@/components/marketing/leave-calculator-demo";
 import { Magnetic, RoleStory } from "@/components/marketing/role-story";
+import { AuroraCanvas } from "@/components/marketing/aurora-canvas";
+import { LitStatement } from "@/components/marketing/statement";
 import { ContactForm } from "@/components/marketing/contact-form";
 import { EMPLOYEE_RANGES, INTEREST_OPTIONS, LOCATION_COUNTS } from "@/server/services/contact";
 import { brand } from "@/config/brand";
@@ -119,7 +121,12 @@ export default function HomePage() {
       <PointerSpotlight />
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div aria-hidden className="hero-backdrop pointer-events-none absolute inset-0 -z-10" />
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+          <div className="hero-backdrop absolute inset-0" />
+          <AuroraCanvas className="absolute inset-0 size-full" />
+          <div className="hero-grid absolute inset-0" />
+          <div className="hero-fade absolute inset-0" />
+        </div>
         <div className="mx-auto max-w-5xl px-4 pt-16 text-center sm:px-6 sm:pt-24">
           <p className="hs-fade-up mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-surface/80 px-3 py-1 text-xs font-medium text-muted backdrop-blur">
             <span className="relative flex size-1.5" aria-hidden>
@@ -156,6 +163,11 @@ export default function HomePage() {
             </TiltStage>
           </div>
         </div>
+      </section>
+
+      {/* Statement */}
+      <section aria-label="Kurz gesagt" className="px-4 py-24 sm:px-6 sm:py-32">
+        <LitStatement text="Ein Ort für jeden Antrag. Eine klare Entscheidung. Ein Kalender, den alle verstehen." accentFrom={10} />
       </section>
 
       {/* Problem & Lösung */}
