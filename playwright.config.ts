@@ -47,6 +47,7 @@ export default defineConfig({
     env: {
       DATABASE_URL: E2E_DATABASE_URL,
       APP_URL: `http://localhost:${PORT}`,
+      APP_SECRET: process.env.APP_SECRET ?? "",
       TRUST_PROXY: "false",
       SMTP_HOST: "",
     },
