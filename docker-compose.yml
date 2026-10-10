@@ -1,0 +1,22 @@
+# Lokale Entwicklungsdatenbank. Nicht für den Produktivbetrieb gedacht.
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pflegewerk_owner
+      POSTGRES_PASSWORD: pflegewerk_owner_dev
+      POSTGRES_DB: pflegewerk
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pflegewerk_owner -d pflegewerk"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
