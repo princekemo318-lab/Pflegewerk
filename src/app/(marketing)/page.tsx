@@ -18,6 +18,7 @@ import { buttonClasses } from "@/components/ui/primitives";
 import { HeroScene, RevealHeading } from "@/components/marketing/hero-scene";
 import { PointerSpotlight, TiltStage } from "@/components/marketing/pointer-effects";
 import { LeaveCalculatorDemo } from "@/components/marketing/leave-calculator-demo";
+import { Magnetic, RoleStory } from "@/components/marketing/role-story";
 import { ContactForm } from "@/components/marketing/contact-form";
 import { EMPLOYEE_RANGES, INTEREST_OPTIONS, LOCATION_COUNTS } from "@/server/services/contact";
 import { brand } from "@/config/brand";
@@ -134,10 +135,12 @@ export default function HomePage() {
             Urlaubsanträge, Genehmigungen und Abwesenheiten an einem Ort. Weniger Rückfragen, mehr Überblick.
           </p>
           <div className="hs-fade-up mt-9 flex flex-wrap justify-center gap-3" style={{ ["--d" as string]: "600ms" }}>
-            <Link href="#kontakt" className={buttonClasses("primary", "lg", "group")}>
-              Demo anfragen
-              <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden />
-            </Link>
+            <Magnetic>
+              <Link href="#kontakt" className={buttonClasses("primary", "lg", "group shadow-[0_10px_30px_-10px_var(--primary)]")}>
+                Demo anfragen
+                <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden />
+              </Link>
+            </Magnetic>
             <Link href="#funktionen" className={buttonClasses("secondary", "lg")}>
               Funktionen entdecken
             </Link>
@@ -221,6 +224,19 @@ export default function HomePage() {
                 <p className="mt-1.5 text-sm text-muted">{f.text}</p>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Scroll-Story: ein Antrag, drei Rollen */}
+      <section aria-labelledby="story-title" className="border-y border-line bg-surface">
+        <div className="mx-auto max-w-6xl px-4 pt-20 sm:px-6 lg:pb-8">
+          <p className="reveal text-sm font-medium text-accent-text">Ein Antrag, drei Rollen</p>
+          <h2 id="story-title" className="reveal mt-2 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
+            Vom Antrag bis zum Überblick – jede Rolle sieht, was sie braucht.
+          </h2>
+          <div className="mt-6 pb-16 lg:mt-0 lg:pb-0">
+            <RoleStory />
           </div>
         </div>
       </section>
