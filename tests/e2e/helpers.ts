@@ -49,8 +49,14 @@ export function de(iso: string) {
 }
 
 /** Stellt einen Urlaubsantrag über die Oberfläche und gibt die Antrags-URL zurück. */
+/** Wartet, bis das Antragsformular hydriert und eingabebereit ist. */
+export async function openLeaveForm(page: Page, path = "/app/antraege/neu") {
+  await page.goto(path);
+  await expect(page.locator("[data-ready=true]")).toBeVisible();
+}
+
 export async function submitVacation(page: Page, start: string, end: string, note?: string) {
-  await page.goto("/app/antraege/neu");
+  await openLeaveForm(page);
   await page.getByLabel("Erster Tag").fill(start);
   await page.getByLabel("Letzter Tag").fill(end);
   if (note) await page.getByRole("textbox", { name: /^Nachricht/ }).fill(note);

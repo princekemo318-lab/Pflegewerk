@@ -3,7 +3,7 @@
  * Die Tests bauen aufeinander auf und laufen deshalb seriell.
  */
 import { expect, test } from "@playwright/test";
-import { addDays, as, de, fixtures, mondayOfWeek, submitVacation } from "./helpers";
+import { addDays, as, de, fixtures, mondayOfWeek, openLeaveForm, submitVacation } from "./helpers";
 
 test.describe.configure({ mode: "serial" });
 
@@ -16,7 +16,7 @@ test("Mitarbeiterin beantragt Urlaub, Teamleitung genehmigt, Mitarbeiterin sieht
 
   const emp = await as(browser, "a-emp@e2e.test");
   // Live-Berechnung: Mo–Fr ohne Feiertag = 5 Arbeitstage
-  await emp.page.goto("/app/antraege/neu");
+  await openLeaveForm(emp.page);
   await emp.page.getByLabel("Erster Tag").fill(start);
   await emp.page.getByLabel("Letzter Tag").fill(end);
   await expect(emp.page.locator("aside").getByText("5", { exact: true })).toBeVisible();
@@ -99,7 +99,7 @@ test("Mitarbeiterin zieht einen offenen Antrag zurück", async ({ browser }) => 
 test("Überschneidende Anträge werden verhindert", async ({ browser }) => {
   const start = mondayOfWeek(f().nextYear, 6);
   const emp = await as(browser, "a-emp@e2e.test");
-  await emp.page.goto("/app/antraege/neu");
+  await openLeaveForm(emp.page);
   await emp.page.getByLabel("Erster Tag").fill(addDays(start, 2));
   await emp.page.getByLabel("Letzter Tag").fill(addDays(start, 3));
   await expect(emp.page.getByText(/Überschneidet sich mit einem bestehenden Antrag/)).toBeVisible();

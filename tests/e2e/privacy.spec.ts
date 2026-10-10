@@ -16,6 +16,7 @@ test("Arbeitsunfähigkeit: Personalverwaltung trägt ein, Teamleitung sieht nur 
   await hr.page.goto("/app/mitarbeiter");
   await hr.page.getByRole("link", { name: "Ebert, Emma" }).click();
   await hr.page.getByRole("link", { name: "Abwesenheit eintragen" }).click();
+  await expect(hr.page.locator("[data-ready=true]")).toBeVisible();
   await hr.page.getByLabel("Art der Abwesenheit").selectOption({ label: "Arbeitsunfähigkeit" });
   await hr.page.getByLabel("Erster Tag").fill(start);
   await hr.page.getByLabel("Letzter Tag").fill(end);

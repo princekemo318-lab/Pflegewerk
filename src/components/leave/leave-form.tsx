@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useSyncExternalStore, useTransition } from "react";
 import clsx from "clsx";
 import { AlertTriangle, Loader2 } from "lucide-react";
 import { ActionForm, Field, Input, Select, SubmitButton, Textarea } from "@/components/ui/form";
@@ -9,6 +9,8 @@ import type { ActionState } from "@/server/actions";
 import { formatDate, formatDays, formatNumber, WEEKDAY_SHORT, weekdayIndex } from "@/lib/dates";
 
 type TypeOption = { id: string; name: string; deductsLeave: boolean; requiresApproval: boolean };
+
+const noopSubscribe = () => () => {};
 
 export function LeaveForm({
   action,
@@ -23,6 +25,8 @@ export function LeaveForm({
   today: string;
   submitLabel?: string;
 }) {
+  // Eingaben erst nach dem Hydrieren zulassen – sonst würde React früh getippte Werte überschreiben.
+  const hydrated = useSyncExternalStore(noopSubscribe, () => true, () => false);
   const [typeId, setTypeId] = useState(types[0]?.id ?? "");
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
@@ -49,7 +53,7 @@ export function LeaveForm({
   const overBalance = p?.deductsLeave && p.balances.some((b) => b.configured && (p.byYear[b.year] ?? 0) > b.available);
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]" data-ready={hydrated}>
       <ActionForm action={action} className="space-y-5">
         {employeeId && <input type="hidden" name="employeeId" value={employeeId} />}
         <Field label="Art der Abwesenheit" name="absenceTypeId">
@@ -69,6 +73,7 @@ export function LeaveForm({
               <Input
                 {...f}
                 type="date"
+                disabled={!hydrated}
                 required
                 value={start}
                 min={employeeId ? undefined : `${Number(today.slice(0, 4)) - 1}-01-01`}
@@ -80,7 +85,7 @@ export function LeaveForm({
             )}
           </Field>
           <Field label="Letzter Tag" name="endDate">
-            {(f) => <Input {...f} type="date" required value={end} min={start || undefined} onChange={(e) => setEnd(e.target.value)} />}
+            {(f) => <Input {...f} type="date" disabled={!hydrated} required value={end} min={start || undefined} onChange={(e) => setEnd(e.target.value)} />}
           </Field>
         </div>
         <Field label="Nachricht" name="note" optional hint="Sichtbar für die Person, die über den Antrag entscheidet.">
