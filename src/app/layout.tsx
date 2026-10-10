@@ -1,16 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Bricolage_Grotesque, Figtree } from "next/font/google";
+import { Geist } from "next/font/google";
 import { brand } from "@/config/brand";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
-const display = Bricolage_Grotesque({
-  variable: "--font-display-face",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
-
-const body = Figtree({
+// Eine klare, ruhige Schrift für Überschriften und Text.
+const geist = Geist({
   variable: "--font-body",
   subsets: ["latin"],
 });
@@ -33,7 +28,7 @@ const themeScript = `(function(){try{var t=localStorage.getItem("pw-theme")||"sy
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="de" data-theme="light" suppressHydrationWarning className={`${display.variable} ${body.variable}`}>
+    <html lang="de" data-theme="light" suppressHydrationWarning className={geist.variable}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

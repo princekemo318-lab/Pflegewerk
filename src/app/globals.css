@@ -131,7 +131,7 @@
   --color-focus: var(--focus);
 
   --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display-face), var(--font-body), ui-sans-serif, sans-serif;
+  --font-display: var(--font-body), ui-sans-serif, sans-serif;
 
   --shadow-card: var(--shadow-md);
   --shadow-soft: var(--shadow-sm);
@@ -153,7 +153,6 @@
     background: var(--bg);
     color: var(--fg);
     font-family: var(--font-sans);
-    font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
   }
   h1,
