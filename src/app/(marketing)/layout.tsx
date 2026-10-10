@@ -6,6 +6,7 @@ import { MarketingMenu } from "@/components/marketing/menu";
 
 const NAV = [
   { href: "/#funktionen", label: "Funktionen" },
+  { href: "/#rechner", label: "Urlaubsrechner" },
   { href: "/#fuer-wen", label: "Für wen?" },
   { href: "/#ablauf", label: "So funktioniert es" },
   { href: "/#faq", label: "FAQ" },

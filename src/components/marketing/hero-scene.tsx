@@ -22,6 +22,7 @@ const TEAM = [
   { name: "E. Ebert", bar: [0, 3] as const, color: "teal", live: true },
   { name: "K. Haas", bar: [2, 2] as const, color: "blue" },
   { name: "J. Yilmaz", bar: null, color: "teal" },
+  { name: "S. Krause", bar: [1, 1] as const, color: "violet" },
 ];
 
 export function HeroScene() {
@@ -29,6 +30,8 @@ export function HeroScene() {
     <figure className="hs-stage" aria-label="Beispieldarstellung: Ein Urlaubsantrag wird eingereicht und genehmigt.">
       <div className="hs-glow" aria-hidden />
       <div className="hs-frame" aria-hidden>
+        <span className="hs-beam" />
+        <span className="hs-spot" />
         {/* Fensterleiste */}
         <div className="flex items-center gap-2 border-b border-line px-4 py-2.5">
           <span className="flex gap-1.5">
@@ -74,8 +77,17 @@ export function HeroScene() {
               <span className="hs-counter font-display text-3xl font-semibold tabular" />
               <span className="text-xs text-muted">Arbeitstage</span>
             </div>
-            <span className="hs-button mt-3 flex h-9 items-center justify-center rounded-lg bg-primary text-xs font-medium text-primary-fg">
-              Antrag einreichen
+            <span className="relative mt-3 block">
+              <span className="hs-button flex h-9 items-center justify-center rounded-lg bg-primary text-xs font-medium text-primary-fg">
+                Antrag einreichen
+              </span>
+              {/* Animierter Zeiger: fährt zum Button und klickt */}
+              <span className="hs-cursor">
+                <span className="hs-ripple" />
+                <svg viewBox="0 0 24 24" className="relative size-5" fill="var(--fg)" stroke="var(--surface)" strokeWidth="1.5" strokeLinejoin="round">
+                  <path d="M4 3l15 8.5-6.5 1.6L9.2 19z" />
+                </svg>
+              </span>
             </span>
           </div>
 
@@ -95,7 +107,7 @@ export function HeroScene() {
                   <span className="truncate pr-2 text-[11px] font-medium">{m.name}</span>
                   <div className="relative grid h-8 grid-cols-7 overflow-hidden rounded-md bg-sunken/60">
                     {DAYS.map((day, i) => (
-                      <span key={day.d} className={`border-l border-line/60 first:border-l-0 ${i > 3 ? "bg-sunken" : ""}`} />
+                      <span key={day.d} className={`border-l border-line/60 first:border-l-0 ${i === 4 ? "hs-cal-holiday" : i > 4 ? "bg-sunken" : ""}`} />
                     ))}
                     {m.bar && (
                       <span
@@ -117,6 +129,36 @@ export function HeroScene() {
       </div>
 
       {/* Bestätigung */}
+      {/* Schwebende Ebenen (nur große Bildschirme) – liegen räumlich vor der Szene */}
+      <div className="hs-float hs-float-left" aria-hidden>
+        <div className="hs-bob flex items-center gap-3 rounded-2xl border border-line bg-surface/90 p-3 pr-4 shadow-card backdrop-blur">
+          <svg viewBox="0 0 44 44" className="size-12 -rotate-90">
+            <circle cx="22" cy="22" r="18" fill="none" stroke="var(--sunken)" strokeWidth="5" />
+            <circle className="hs-ring" cx="22" cy="22" r="18" fill="none" stroke="var(--accent)" strokeWidth="5" strokeLinecap="round" pathLength="30" />
+          </svg>
+          <span>
+            <span className="block text-[11px] text-subtle">Resturlaub</span>
+            <span className="block font-display text-lg font-semibold tabular">
+              <span className="hs-balance" /> <span className="text-xs font-normal text-muted">von 30</span>
+            </span>
+          </span>
+        </div>
+      </div>
+      <div className="hs-float hs-float-right" aria-hidden>
+        <div className="hs-bob hs-bob-late flex items-center gap-2.5 rounded-2xl border border-line bg-surface/90 px-3.5 py-2.5 shadow-card backdrop-blur">
+          <span className="grid size-8 place-items-center rounded-xl bg-info-soft text-info">
+            <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4.5" width="18" height="16" rx="3" />
+              <path d="M3 9.5h18M8 2.5v4M16 2.5v4" />
+            </svg>
+          </span>
+          <span>
+            <span className="block text-xs font-semibold">Feiertage automatisch</span>
+            <span className="block text-[11px] text-muted">je Bundesland und Standort</span>
+          </span>
+        </div>
+      </div>
+
       <div className="hs-toast" aria-hidden>
         <span className="grid size-8 shrink-0 place-items-center rounded-full bg-accent-soft text-accent-text">
           <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -144,7 +186,7 @@ export function RevealHeading({ lines, accentFrom }: { lines: string[]; accentFr
             return (
               <span key={i}>
                 <span className={`hs-word ${i >= accentFrom ? "text-accent-text" : ""}`} style={{ ["--i" as string]: i }}>
-                  {word}
+                  {i >= accentFrom ? <span className="hs-sheen">{word}</span> : word}
                 </span>{" "}
               </span>
             );

@@ -37,3 +37,17 @@ test("Sicherheits-Header sind gesetzt", async ({ request }) => {
   expect(h["content-security-policy"]).toContain("frame-ancestors 'none'");
   expect(h["x-powered-by"]).toBeUndefined();
 });
+
+test("Urlaubsrechner berechnet Arbeitstage direkt im Browser", async ({ page }) => {
+  await page.goto("/#rechner");
+  const calc = page.locator("#rechner");
+  await calc.getByRole("button", { name: "Nächster Monat" }).click();
+  const days = calc.locator("button[aria-label]").filter({ hasNotText: /^$/ });
+  // 08. bis 12. des Folgemonats: mindestens ein Arbeitstag, unabhängig vom Datum
+  await days.filter({ has: page.locator("text=/^8$/") }).first().click();
+  await days.filter({ has: page.locator("text=/^12$/") }).last().click();
+  await expect(calc.getByText("Dein Zeitraum")).toBeVisible();
+  const value = Number(await calc.locator("aside .calc-pop").innerText());
+  expect(value).toBeGreaterThanOrEqual(1);
+  expect(value).toBeLessThanOrEqual(5);
+});

@@ -14,11 +14,13 @@
   --hs-t: 10s;
   --hs-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   position: relative;
-  isolation: isolate;
+  /* kein isolation: isolate – das würde die 3D-Ebenen (preserve-3d) flach drücken */
+  transform-style: preserve-3d;
 }
 
 .hs-frame {
   position: relative;
+  z-index: 1;
   border-radius: 1.25rem;
   border: 1px solid var(--line);
   background: color-mix(in srgb, var(--surface) 82%, transparent);
@@ -33,7 +35,8 @@
 .hs-glow {
   position: absolute;
   inset: -12% -8% -20%;
-  z-index: -1;
+  z-index: 0;
+  pointer-events: none;
   background:
     radial-gradient(40% 50% at 30% 40%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 70%),
     radial-gradient(40% 50% at 75% 60%, color-mix(in srgb, var(--info) 22%, transparent), transparent 70%);
@@ -43,8 +46,8 @@
 }
 
 @keyframes hs-drift {
-  from { transform: translate3d(-2%, 0, 0) scale(1); }
-  to { transform: translate3d(3%, -3%, 0) scale(1.06); }
+  from { transform: translate3d(-2%, 0, -120px) scale(1.15); }
+  to { transform: translate3d(3%, -3%, -120px) scale(1.22); }
 }
 
 /* --- Wochentage ------------------------------------------------------------ */
@@ -239,4 +242,225 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .lift:hover { transform: none; }
+}
+
+/* ---------------------------------------------------------------------------
+   Stufe 2: Lichtlauf, Zeiger-Tilt, Cursor, Glanzlicht, Spotlight-Karten
+   --------------------------------------------------------------------------- */
+@property --hs-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Lichtlauf um den Rahmen */
+.hs-beam {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--hs-angle),
+    transparent 0deg,
+    transparent 290deg,
+    color-mix(in srgb, var(--accent) 90%, white) 330deg,
+    var(--info) 350deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: hs-beam 7s linear infinite;
+}
+@keyframes hs-beam { to { --hs-angle: 360deg; } }
+
+/* Zeiger-Tilt (Werte kommen aus TiltStage) */
+.tilt-stage { perspective: 1800px; }
+.tilt-inner {
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.hs-spot {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: var(--spot, 0);
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 40%), color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%);
+  mix-blend-mode: plus-lighter;
+}
+:root:not([data-theme="dark"]) .hs-spot { mix-blend-mode: normal; }
+
+/* Animierter Zeiger: fährt zum Button, klickt, fährt weg */
+.hs-cursor {
+  position: absolute;
+  left: 58%;
+  top: 40%;
+  z-index: 4;
+  animation: hs-cursor var(--hs-t) var(--hs-ease) infinite both;
+}
+@keyframes hs-cursor {
+  0%, 14% { opacity: 0; transform: translate(170px, -110px); }
+  18% { opacity: 1; transform: translate(130px, -85px); }
+  27% { opacity: 1; transform: translate(0, 0) scale(1); }
+  29% { transform: translate(0, 0) scale(0.86); }
+  31% { transform: translate(0, 0) scale(1); }
+  40% { opacity: 1; transform: translate(90px, -40px); }
+  46%, 100% { opacity: 0; transform: translate(140px, -70px); }
+}
+.hs-ripple {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border-radius: 999px;
+  border: 2px solid var(--accent);
+  animation: hs-ripple var(--hs-t) ease-out infinite both;
+}
+@keyframes hs-ripple {
+  0%, 28.5% { opacity: 0; transform: scale(0.3); }
+  29.5% { opacity: 0.9; transform: scale(0.5); }
+  36%, 100% { opacity: 0; transform: scale(1.8); }
+}
+
+/* Glanzlicht über den Akzentwörtern */
+.hs-sheen {
+  background: linear-gradient(
+    100deg,
+    var(--accent-text) 0%,
+    var(--accent-text) 40%,
+    color-mix(in srgb, var(--accent) 55%, white) 50%,
+    var(--accent-text) 60%,
+    var(--accent-text) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: hs-sheen 6s ease-in-out 1.4s infinite;
+}
+@keyframes hs-sheen {
+  0% { background-position: 100% 0; }
+  35%, 100% { background-position: -50% 0; }
+}
+
+/* Spotlight-Karten (Position aus PointerSpotlight) */
+.spotlight { position: relative; isolation: isolate; }
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 300ms;
+  background: radial-gradient(320px circle at var(--sx, 50%) var(--sy, 50%), color-mix(in srgb, var(--accent) 10%, transparent), transparent 65%);
+}
+.spotlight:hover::before { opacity: 1; }
+
+/* Ablauf: Linie zeichnet sich beim Scrollen */
+.steps-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--info));
+  transform-origin: left;
+  transform: scaleX(1);
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .steps-line {
+      animation: steps-draw linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 55%;
+    }
+    @keyframes steps-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-beam, .hs-cursor, .hs-ripple, .hs-sheen { animation: none !important; }
+  .hs-cursor, .hs-ripple { opacity: 0; }
+  .hs-sheen { color: inherit; background: none; }
+}
+
+.hs-cal-holiday {
+  background-image: repeating-linear-gradient(-45deg, transparent 0 4px, color-mix(in srgb, var(--fg-subtle) 22%, transparent) 4px 6px);
+}
+
+/* ---------------------------------------------------------------------------
+   Stufe 3: schwebende Ebenen mit echter Tiefe (Parallaxe über TiltStage)
+   --------------------------------------------------------------------------- */
+@property --hs-b {
+  syntax: "<integer>";
+  initial-value: 30;
+  inherits: false;
+}
+.hs-float {
+  position: absolute;
+  z-index: 5;
+  display: none;
+  pointer-events: none;
+}
+@media (min-width: 1280px) {
+  .hs-float { display: block; }
+}
+.hs-float-left { left: -7rem; top: 60%; transform: translateZ(90px); }
+.hs-float-right { right: -6rem; top: 14%; transform: translateZ(130px); }
+
+.hs-bob { animation: hs-bob 7s ease-in-out infinite; }
+.hs-bob-late { animation-delay: -3.5s; }
+@keyframes hs-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* Resturlaub: 30 → 26 genau beim Genehmigen (51 %) */
+.hs-balance {
+  counter-reset: hsb var(--hs-b);
+  animation: hs-balance var(--hs-t) linear infinite both;
+}
+.hs-balance::after { content: counter(hsb); }
+@keyframes hs-balance {
+  0%, 51% { --hs-b: 30; }
+  52%, 53.9% { --hs-b: 29; }
+  54%, 55.9% { --hs-b: 28; }
+  56%, 57.9% { --hs-b: 27; }
+  58%, 92% { --hs-b: 26; }
+  94%, 100% { --hs-b: 30; }
+}
+.hs-ring {
+  stroke-dasharray: 30 30;
+  animation: hs-ring var(--hs-t) var(--hs-ease) infinite both;
+}
+@keyframes hs-ring {
+  0%, 51% { stroke-dashoffset: 0; }
+  58%, 92% { stroke-dashoffset: 4; }
+  96%, 100% { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-bob, .hs-balance, .hs-ring { animation: none !important; }
+  .hs-balance { counter-reset: hsb 26; }
+  .hs-ring { stroke-dashoffset: 4; }
+}
+
+/* --- Urlaubsrechner -------------------------------------------------------- */
+.calc-holiday {
+  background-image: repeating-linear-gradient(-45deg, transparent 0 4px, color-mix(in srgb, var(--info) 22%, transparent) 4px 6px);
+}
+.calc-pop { display: inline-block; animation: calc-pop 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes calc-pop {
+  from { opacity: 0.2; transform: translateY(8px) scale(0.92); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .calc-pop { animation: none; }
 }

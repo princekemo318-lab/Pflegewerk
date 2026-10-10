@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { buttonClasses } from "@/components/ui/primitives";
 import { HeroScene, RevealHeading } from "@/components/marketing/hero-scene";
+import { PointerSpotlight, TiltStage } from "@/components/marketing/pointer-effects";
+import { LeaveCalculatorDemo } from "@/components/marketing/leave-calculator-demo";
 import { ContactForm } from "@/components/marketing/contact-form";
 import { EMPLOYEE_RANGES, INTEREST_OPTIONS, LOCATION_COUNTS } from "@/server/services/contact";
 import { brand } from "@/config/brand";
@@ -113,6 +115,7 @@ const FAQ = [
 export default function HomePage() {
   return (
     <>
+      <PointerSpotlight />
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div aria-hidden className="hero-backdrop pointer-events-none absolute inset-0 -z-10" />
@@ -145,7 +148,9 @@ export default function HomePage() {
         </div>
         <div className="hs-fade-up mx-auto mt-14 max-w-5xl px-4 pb-28 sm:mt-16 sm:px-6" style={{ ["--d" as string]: "500ms" }}>
           <div className="hs-tilt">
-            <HeroScene />
+            <TiltStage>
+              <HeroScene />
+            </TiltStage>
           </div>
         </div>
       </section>
@@ -175,6 +180,22 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Interaktiver Urlaubsrechner */}
+      <section id="rechner" aria-labelledby="rechner-title" className="scroll-mt-16">
+        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+          <p className="reveal text-sm font-medium text-accent-text">Probier es aus</p>
+          <h2 id="rechner-title" className="reveal mt-2 max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
+            Wie viele Urlaubstage sind das eigentlich?
+          </h2>
+          <p className="reveal mt-3 max-w-2xl text-muted">
+            Wähle einen Zeitraum. Wochenenden, freie Tage und die Feiertage deines Bundeslandes werden sofort abgezogen – genau wie in der Plattform.
+          </p>
+          <div className="reveal mt-10">
+            <LeaveCalculatorDemo />
+          </div>
+        </div>
+      </section>
+
       {/* Funktionen */}
       <section id="funktionen" aria-labelledby="funktionen-title" className="scroll-mt-16">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
@@ -184,7 +205,7 @@ export default function HomePage() {
           <p className="mt-3 max-w-2xl text-muted">Jede hier gezeigte Funktion ist heute nutzbar.</p>
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
             {FEATURES.slice(0, 2).map((f) => (
-              <article key={f.title} className="reveal lift flex flex-col rounded-2xl border border-line bg-surface p-6 shadow-soft">
+              <article key={f.title} className="reveal lift spotlight flex flex-col rounded-2xl border border-line bg-surface p-6 shadow-soft">
                 <f.icon className="size-5 text-accent-text" aria-hidden />
                 <h3 className="mt-4 text-xl font-semibold">{f.title}</h3>
                 <p className="mt-2 text-muted">{f.text}</p>
@@ -237,7 +258,9 @@ export default function HomePage() {
           <h2 id="ablauf-title" className="reveal text-3xl font-semibold tracking-tight sm:text-4xl">
             So funktioniert es
           </h2>
-          <ol className="reveal mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-4">
+          <div className="reveal relative mt-12 overflow-hidden rounded-2xl border border-line">
+            <span aria-hidden className="steps-line z-10" />
+            <ol className="grid gap-px bg-line md:grid-cols-4">
             {STEPS.map(([title, text], i) => (
               <li key={title} className="bg-surface p-6">
                 <span className="font-display text-sm font-semibold text-accent-text tabular">Schritt {i + 1}</span>
@@ -246,6 +269,7 @@ export default function HomePage() {
               </li>
             ))}
           </ol>
+          </div>
         </div>
       </section>
 
@@ -261,7 +285,7 @@ export default function HomePage() {
           </p>
           <div className="mt-10 grid gap-6 sm:grid-cols-2">
             {SECURITY.map((s) => (
-              <div key={s.title} className="reveal lift flex gap-4 rounded-2xl border border-line p-6">
+              <div key={s.title} className="reveal lift spotlight flex gap-4 rounded-2xl border border-line p-6">
                 <s.icon className="mt-0.5 size-5 shrink-0 text-accent-text" aria-hidden />
                 <div>
                   <h3 className="font-semibold">{s.title}</h3>
