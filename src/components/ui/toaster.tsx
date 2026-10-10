@@ -61,7 +61,7 @@ export function Toaster() {
         <div
           key={t.id}
           role={t.tone === "error" ? "alert" : "status"}
-          className="pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-xl border border-line bg-surface px-4 py-3 text-sm shadow-card"
+          className="pw-toast pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-xl border border-line bg-surface px-4 py-3 text-sm shadow-card"
         >
           {t.tone === "success" ? (
             <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden />

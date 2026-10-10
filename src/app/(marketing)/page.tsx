@@ -15,7 +15,7 @@ import {
   Database,
 } from "lucide-react";
 import { buttonClasses } from "@/components/ui/primitives";
-import { WeekBoardPreview } from "@/components/marketing/week-board";
+import { HeroScene, RevealHeading } from "@/components/marketing/hero-scene";
 import { ContactForm } from "@/components/marketing/contact-form";
 import { EMPLOYEE_RANGES, INTEREST_OPTIONS, LOCATION_COUNTS } from "@/server/services/contact";
 import { brand } from "@/config/brand";
@@ -115,44 +115,49 @@ export default function HomePage() {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-60 [background-image:linear-gradient(var(--line)_1px,transparent_1px),linear-gradient(90deg,var(--line)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]"
-        />
-        <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pt-14 pb-24 sm:px-6 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,34rem)] lg:pb-28">
-          <div className="min-w-0">
-            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-muted">
-              <span className="size-1.5 rounded-full bg-accent" aria-hidden />
-              Für private Pflege- und Betreuungsunternehmen
-            </p>
-            <h1 className="text-[2rem] leading-[1.05] font-semibold tracking-[-0.03em] hyphens-auto min-[400px]:text-[2.4rem] sm:text-[3rem] lg:text-display">
-              Personalverwaltung, die <span className="text-accent-text">einfach funktioniert.</span>
-            </h1>
-            <p className="mt-6 max-w-xl text-lg text-muted">
-              Organisiere Urlaubsanträge, Abwesenheiten und interne Genehmigungen zentral an einem Ort. Weniger Rückfragen für dein Team
-              und mehr Überblick für deine Verwaltung.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="#kontakt" className={buttonClasses("primary", "lg")}>
-                Demo anfragen
-              </Link>
-              <Link href="#funktionen" className={buttonClasses("secondary", "lg")}>
-                Funktionen entdecken
-              </Link>
-            </div>
+        <div aria-hidden className="hero-backdrop pointer-events-none absolute inset-0 -z-10" />
+        <div className="mx-auto max-w-5xl px-4 pt-16 text-center sm:px-6 sm:pt-24">
+          <p className="hs-fade-up mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-surface/80 px-3 py-1 text-xs font-medium text-muted backdrop-blur">
+            <span className="relative flex size-1.5" aria-hidden>
+              <span className="absolute inset-0 animate-ping rounded-full bg-accent opacity-60 motion-reduce:hidden" />
+              <span className="relative size-1.5 rounded-full bg-accent" />
+            </span>
+            Für private Pflege- und Betreuungsunternehmen
+          </p>
+          <h1 className="mx-auto max-w-4xl text-[2.15rem] leading-[1.03] font-semibold tracking-[-0.035em] hyphens-auto min-[400px]:text-[2.6rem] sm:text-[3.6rem] lg:text-[4.5rem]">
+            <RevealHeading lines={["Personalverwaltung,", "die einfach funktioniert."]} accentFrom={2} />
+          </h1>
+          <p className="hs-fade-up mx-auto mt-6 max-w-xl text-lg text-pretty text-muted" style={{ ["--d" as string]: "450ms" }}>
+            Urlaubsanträge, Genehmigungen und Abwesenheiten an einem Ort. Weniger Rückfragen, mehr Überblick.
+          </p>
+          <div className="hs-fade-up mt-9 flex flex-wrap justify-center gap-3" style={{ ["--d" as string]: "600ms" }}>
+            <Link href="#kontakt" className={buttonClasses("primary", "lg", "group")}>
+              Demo anfragen
+              <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden />
+            </Link>
+            <Link href="#funktionen" className={buttonClasses("secondary", "lg")}>
+              Funktionen entdecken
+            </Link>
           </div>
-          <WeekBoardPreview />
+          <p className="hs-fade-up mt-5 text-xs text-subtle" style={{ ["--d" as string]: "750ms" }}>
+            Im Browser · Auf dem Smartphone · Ohne Installation
+          </p>
+        </div>
+        <div className="hs-fade-up mx-auto mt-14 max-w-5xl px-4 pb-28 sm:mt-16 sm:px-6" style={{ ["--d" as string]: "500ms" }}>
+          <div className="hs-tilt">
+            <HeroScene />
+          </div>
         </div>
       </section>
 
       {/* Problem & Lösung */}
       <section aria-labelledby="problem" className="border-y border-line bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-          <h2 id="problem" className="max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 id="problem" className="reveal max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
             Vom Zettel an der Stationstür zum klaren Ablauf.
           </h2>
           <p className="mt-3 max-w-2xl text-muted">Kommt dir das bekannt vor? So sieht derselbe Vorgang mit {brand.name} aus.</p>
-          <div className="mt-10 overflow-hidden rounded-2xl border border-line">
+          <div className="reveal mt-10 overflow-hidden rounded-2xl border border-line">
             <div className="hidden grid-cols-2 bg-sunken text-xs font-medium tracking-wide text-subtle uppercase md:grid">
               <p className="px-6 py-3">Heute</p>
               <p className="border-l border-line px-6 py-3">Mit {brand.name}</p>
@@ -173,13 +178,13 @@ export default function HomePage() {
       {/* Funktionen */}
       <section id="funktionen" aria-labelledby="funktionen-title" className="scroll-mt-16">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-          <h2 id="funktionen-title" className="max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 id="funktionen-title" className="reveal max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
             Alles, was ihr für Urlaub und Abwesenheiten braucht. Nicht mehr.
           </h2>
           <p className="mt-3 max-w-2xl text-muted">Jede hier gezeigte Funktion ist heute nutzbar.</p>
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
             {FEATURES.slice(0, 2).map((f) => (
-              <article key={f.title} className="flex flex-col rounded-2xl border border-line bg-surface p-6 shadow-soft">
+              <article key={f.title} className="reveal lift flex flex-col rounded-2xl border border-line bg-surface p-6 shadow-soft">
                 <f.icon className="size-5 text-accent-text" aria-hidden />
                 <h3 className="mt-4 text-xl font-semibold">{f.title}</h3>
                 <p className="mt-2 text-muted">{f.text}</p>
@@ -187,7 +192,7 @@ export default function HomePage() {
               </article>
             ))}
           </div>
-          <div className="mt-6 grid gap-x-8 gap-y-10 rounded-2xl border border-line bg-surface p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-3">
+          <div className="reveal mt-6 grid gap-x-8 gap-y-10 rounded-2xl border border-line bg-surface p-6 sm:grid-cols-2 sm:p-8 lg:grid-cols-3">
             {FEATURES.slice(2).map((f) => (
               <article key={f.title}>
                 <f.icon className="size-5 text-accent-text" aria-hidden />
@@ -203,7 +208,7 @@ export default function HomePage() {
       <section id="fuer-wen" aria-labelledby="fuer-wen-title" className="scroll-mt-16 bg-[#13294b] text-white">
         <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
           <div>
-            <h2 id="fuer-wen-title" className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h2 id="fuer-wen-title" className="reveal text-3xl font-semibold tracking-tight sm:text-4xl">
               Für kleine und mittlere Pflege&shy;unternehmen.
             </h2>
             <p className="mt-4 text-white/70">
@@ -215,7 +220,7 @@ export default function HomePage() {
               Abwesenheiten.
             </p>
           </div>
-          <ul className="divide-y divide-white/10 border-y border-white/10">
+          <ul className="reveal divide-y divide-white/10 border-y border-white/10">
             {ROLES.map(([role, text]) => (
               <li key={role} className="grid gap-1 py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6">
                 <span className="font-display font-semibold">{role}</span>
@@ -229,10 +234,10 @@ export default function HomePage() {
       {/* Ablauf */}
       <section id="ablauf" aria-labelledby="ablauf-title" className="scroll-mt-16">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-          <h2 id="ablauf-title" className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 id="ablauf-title" className="reveal text-3xl font-semibold tracking-tight sm:text-4xl">
             So funktioniert es
           </h2>
-          <ol className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-4">
+          <ol className="reveal mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-4">
             {STEPS.map(([title, text], i) => (
               <li key={title} className="bg-surface p-6">
                 <span className="font-display text-sm font-semibold text-accent-text tabular">Schritt {i + 1}</span>
@@ -247,7 +252,7 @@ export default function HomePage() {
       {/* Datenschutz & Sicherheit */}
       <section id="sicherheit" aria-labelledby="sicherheit-title" className="scroll-mt-16 border-y border-line bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-          <h2 id="sicherheit-title" className="max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 id="sicherheit-title" className="reveal max-w-2xl text-3xl font-semibold tracking-tight sm:text-4xl">
             Datenschutz und Sicherheit, eingebaut statt aufgesetzt.
           </h2>
           <p className="mt-3 max-w-2xl text-muted">
@@ -256,7 +261,7 @@ export default function HomePage() {
           </p>
           <div className="mt-10 grid gap-6 sm:grid-cols-2">
             {SECURITY.map((s) => (
-              <div key={s.title} className="flex gap-4 rounded-2xl border border-line p-6">
+              <div key={s.title} className="reveal lift flex gap-4 rounded-2xl border border-line p-6">
                 <s.icon className="mt-0.5 size-5 shrink-0 text-accent-text" aria-hidden />
                 <div>
                   <h3 className="font-semibold">{s.title}</h3>
@@ -271,7 +276,7 @@ export default function HomePage() {
       {/* FAQ */}
       <section id="faq" aria-labelledby="faq-title" className="scroll-mt-16">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)]">
-          <h2 id="faq-title" className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h2 id="faq-title" className="reveal text-3xl font-semibold tracking-tight sm:text-4xl">
             Häufige Fragen
           </h2>
           <div className="divide-y divide-line border-y border-line">
@@ -294,7 +299,7 @@ export default function HomePage() {
       <section id="kontakt" aria-labelledby="kontakt-title" className="scroll-mt-16 border-t border-line bg-surface">
         <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
           <div>
-            <h2 id="kontakt-title" className="text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h2 id="kontakt-title" className="reveal text-3xl font-semibold tracking-tight sm:text-4xl">
               Lass uns sprechen.
             </h2>
             <p className="mt-4 text-muted">
@@ -310,7 +315,7 @@ export default function HomePage() {
               ))}
             </ul>
           </div>
-          <div className="relative rounded-2xl border border-line bg-bg p-6 sm:p-8">
+          <div className="reveal relative rounded-2xl border border-line bg-bg p-6 sm:p-8">
             <ContactForm employeeRanges={EMPLOYEE_RANGES} locationCounts={LOCATION_COUNTS} interests={INTEREST_OPTIONS} />
           </div>
         </div>

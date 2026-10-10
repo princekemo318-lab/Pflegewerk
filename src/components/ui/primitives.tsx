@@ -16,7 +16,7 @@ type Size = "sm" | "md" | "lg";
 
 export function buttonClasses(variant: Variant = "primary", size: Size = "md", extra?: string) {
   return clsx(
-    "inline-flex items-center justify-center gap-2 rounded-lg font-medium whitespace-nowrap transition-colors",
+    "inline-flex items-center justify-center gap-2 rounded-lg font-medium whitespace-nowrap transition-[color,background-color,border-color,box-shadow,transform,filter] duration-200 active:scale-[0.97] motion-reduce:active:scale-100",
     "disabled:pointer-events-none disabled:opacity-55 aria-disabled:pointer-events-none aria-disabled:opacity-55",
     {
       "h-8 px-3 text-sm": size === "sm",
@@ -133,7 +133,7 @@ export function EmptyState({
 }
 
 export function Skeleton({ className }: { className?: string }) {
-  return <div aria-hidden className={clsx("animate-pulse rounded-md bg-sunken", className)} />;
+  return <div aria-hidden className={clsx("pw-shimmer rounded-md", className)} />;
 }
 
 export function Notice({
